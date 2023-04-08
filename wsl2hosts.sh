@@ -12,8 +12,8 @@
 # --------------------------------------------------------------------------------------------------
 
 # adjust this paths to your environment
-export PATH=/mnt/c/Users/your-USERNAME/gsudo/x64/:$PATH
-export PATH=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:$PATH
+GSUDO_EXEC=/mnt/c/tools/gsudo/current/gsudo
+PS_EXEC=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
 
 change_wsl_ssh_ip(){
   # define your dns name
@@ -35,12 +35,12 @@ change_wsl_ssh_ip(){
   if [[ "$_win_ssh_ip_addr" == "" ]]
   then
     echo "ssh ip is missing, adding to windows hosts"
-    gsudo powershell.exe -Command "echo '' '$_wsl_ssh_ip_addr  $_wsl_ssh_ip_name' | out-file -encoding ASCII $_winhosts -append"
+    $GSUDO_EXEC $PS_EXEC -Command "echo '' '$_wsl_ssh_ip_addr  $_wsl_ssh_ip_name' | out-file -encoding ASCII $_winhosts -append"
   else
     if [[ "$_win_ssh_ip_addr" != "$_wsl_ssh_ip_addr" ]]
     then
       echo "ssh ip diff, modifying windows hosts"
-      gsudo powershell.exe -Command "(gc $_winhosts) -replace '$_win_ssh_ip_addr', '$_wsl_ssh_ip_addr' | out-file -encoding ASCII $_winhosts"
+      $GSUDO_EXEC $PS_EXEC -Command "(gc $_winhosts) -replace '$_win_ssh_ip_addr', '$_wsl_ssh_ip_addr' | out-file -encoding ASCII $_winhosts"
     else
       echo "ssh ip ok"
     fi
